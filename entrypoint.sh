@@ -19,7 +19,7 @@ EVENT_TYPE=$(jq -r .action /github/workflow/event.json)
 
 # Default the Fly app name to pr-{number}-{repo_owner}-{repo_name}
 app="${INPUT_NAME:-pr-$PR_NUMBER-$REPO_OWNER-$REPO_NAME}"
-region="${INPUT_REGION:-${FLY_REGION:-iad}}"
+regions="${INPUT_REGION:-${FLY_REGION:-iad}}"
 org="${INPUT_ORG:-${FLY_ORG:-personal}}"
 image="$INPUT_IMAGE"
 
@@ -36,14 +36,14 @@ fi
 
 # Deploy the Fly app, creating it first if needed.
 if ! flyctl status --app "$app"; then
-  # flyctl launch --no-deploy --copy-config --name "$app" --image "$image" --region "$region" --org "$org" <-- Buggy with errors, creating the app first then updating it.
+  # flyctl launch --no-deploy --copy-config --name "$app" --image "$image" --regions "$regions" --org "$org" <-- Buggy with errors, creating the app first then updating it.
   flyctl apps create --name "$app" --org "$org"
   if [ -n "$INPUT_SECRETS" ]; then
     echo $INPUT_SECRETS | tr " " "\n" | flyctl secrets import --app "$app"
   fi
-  flyctl deploy --app "$app" --region "$region" --image "$image" --region "$region" --strategy immediate
+  flyctl deploy --app "$app" --regions "$regions" --image "$image" --regions "$regions" --strategy immediate
 elif [ "$INPUT_UPDATE" != "false" ]; then
-  flyctl deploy --app "$app" --region "$region" --image "$image" --region "$region" --strategy immediate
+  flyctl deploy --app "$app" --regions "$regions" --image "$image" --regions "$regions" --strategy immediate
 fi
 
 # Attach postgres cluster to the app if specified.
