@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM alpine
 
 RUN apk add --no-cache curl jq
 
