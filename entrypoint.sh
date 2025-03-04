@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/sh -l
 
 set -ex
 
@@ -20,8 +20,8 @@ EVENT_TYPE=$(jq -r .action /github/workflow/event.json)
 app="${INPUT_NAME:-pr-$PR_NUMBER-$GITHUB_REPOSITORY_OWNER-$GITHUB_REPOSITORY_NAME}"
 # Change underscores to hyphens.
 app="${app//_/-}"
-# change uppercase to lowercase.
-app="${app,,}"
+# Convert uppercase to lowercase using tr (compatible with Alpine's ash shell)
+app=$(echo "$app" | tr '[:upper:]' '[:lower:]')
 # remove all periods.
 app="${app//./}"
 
