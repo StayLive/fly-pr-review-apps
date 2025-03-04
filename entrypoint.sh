@@ -17,7 +17,7 @@ GITHUB_REPOSITORY_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
 EVENT_TYPE=$(jq -r .action /github/workflow/event.json)
 
 # Default the Fly app name to pr-{number}-{repo_owner}-{repo_name}
-app="${INPUT_NAME:-pr-$PR_NUMBER-$GITHUB_REPOSITORY_OWNER-$GITHUB_REPOSITORY_NAME}"
+app="${INPUT_NAME:-$GITHUB_REPOSITORY_OWNER-$GITHUB_REPOSITORY_NAME-pr-$PR_NUMBER}"
 # Change underscores to hyphens.
 app="${app//_/-}"
 # Convert uppercase to lowercase using tr (compatible with Alpine's ash shell)
